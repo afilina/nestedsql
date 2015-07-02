@@ -1,27 +1,70 @@
 # Nested SQL
 
+PHP >=5.4
+
 This is a simple function to fetch your PDO statement as a nested resultset. This is meant as an alternative for using ORMs when you're not interested in the rest of their features.
+
+This is the output that you should expect.
+```
+stdClass Object
+(
+    [albums] => Array
+        (
+            [1] => stdClass Object
+                (
+                    [id] => 1
+                    [photos] => Array
+                        (
+                            [1] => stdClass Object
+                                (
+                                    [id] => 1
+                                )
+                        )
+                )
+            [2] => stdClass Object
+                (
+                    [id] => 2
+                    [photos] => Array
+                        (
+                            [3] => stdClass Object
+                                (
+                                    [id] => 3
+                                )
+                        )
+                )
+        )
+)
+```
 
 ## Usage
 
-You'll need the classes to hold your results and a special alias formatting in your SQL.
+Here's how you format your SQL. The function assumes that you're using an `id` alias for each object and that it's unique.
 
 ```
-class Album
-{
-    public $id;
-    public $name;
-    public $photos; // Related photos will go here
-}
+SELECT album.id AS albums__id, photo.id AS albums__photos__id
+FROM album
+LEFT JOIN photo ON photo.album_id = album.id;
 ```
 
-Here's how you format your SQL:
+To use the function, simply require it like this:
 
 ```
-SELECT album.id AS album__id, photo.id AS album__photo__id FROM album LEFT JOIN photo ON photo.album_id = album.id;
+$statement = $pdo->prepare($sql);
+$statement->execute();
+$fetch_nested_sql = require 'src/NestedSql.php';
+$result = $fetch_nested_sql($statement);
 ```
 
-The function assumes that you're using an `id` column as your primary index and that it's present in the query for every parent object.
+If you'd like to use custom classes instead of stdClass, pass them in the second parameter:
+
+```
+$result = $fetch_nested_sql($statement, [
+    'albums' => 'CustomAlbum',
+    'photos' => 'CustomPhoto',
+]);
+```
+
+For any omitted class, the function will use stdClass.
 
 ## Contributing
 
