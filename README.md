@@ -5,7 +5,7 @@ PHP >=5.4
 This is a simple function to fetch your PDO statement as a nested resultset. This is meant as an alternative for using ORMs when you're not interested in the rest of their features.
 
 This is the output that you should expect.
-```
+```php
 stdClass Object
 (
     [albums] => Array
@@ -40,7 +40,7 @@ stdClass Object
 
 Here's how you format your SQL. The function assumes that you're using an `id` alias for each object and that it's unique.
 
-```
+```sql
 SELECT album.id AS albums__id, photo.id AS albums__photos__id
 FROM album
 LEFT JOIN photo ON photo.album_id = album.id;
@@ -48,7 +48,7 @@ LEFT JOIN photo ON photo.album_id = album.id;
 
 To use the function, simply require it like this:
 
-```
+```php
 $statement = $pdo->prepare($sql);
 $statement->execute();
 $fetch_nested_sql = require 'src/NestedSql.php';
@@ -57,7 +57,7 @@ $result = $fetch_nested_sql($statement);
 
 If you'd like to use custom classes instead of stdClass, pass them in the second parameter:
 
-```
+```php
 $result = $fetch_nested_sql($statement, [
     'albums' => 'CustomAlbum',
     'photos' => 'CustomPhoto',
