@@ -2,6 +2,11 @@
 
 PHP >=5.4
 
+You can install this file via [Composer](https://getcomposer.org/doc/00-intro.md):
+```
+composer require afilina/nestedsql dev-master
+```
+
 This is a simple function to fetch your PDO statement as a nested resultset. This is meant as an alternative for using ORMs when you're not interested in the rest of their features.
 
 This is the output that you should expect.
