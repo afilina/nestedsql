@@ -1,0 +1,38 @@
+{
+    "name": "afilina/nestedsql",
+    "description": ".",
+    "type": "library",
+    "keywords": [
+        "sql",
+        "pdo",
+        "orm"
+    ],
+    "homepage": "https://afilina.com/",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Anna filina",
+            "email": "anna@foolab.ca",
+            "role": "lead"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/afilina/nestedsql/issues",
+        "source": "https://github.com/afilina/nestedsql"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4",
+        "ext-pdo": "*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
