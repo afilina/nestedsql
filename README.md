@@ -18,23 +18,17 @@ stdClass Object
             [1] => stdClass Object
                 (
                     [id] => 1
-                    [photos] => Array
+                    [photos] => stdClass Object
                         (
-                            [1] => stdClass Object
-                                (
-                                    [id] => 1
-                                )
+                            [id] => 1
                         )
                 )
             [2] => stdClass Object
                 (
                     [id] => 2
-                    [photos] => Array
+                    [photos] => stdClass Object
                         (
-                            [3] => stdClass Object
-                                (
-                                    [id] => 3
-                                )
+                            [id] => 3
                         )
                 )
         )
@@ -60,12 +54,14 @@ $fetch_nested_sql = require 'src/NestedSql.php';
 $result = $fetch_nested_sql($statement);
 ```
 
-If you'd like to use custom classes instead of stdClass, pass them in the second parameter:
+If you'd like to use custom classes instead of stdClass, pass them in the second parameter. If you'd like to specify singleton properties, pass them in the third parameter:
 
 ```php
 $result = $fetch_nested_sql($statement, [
     'albums' => 'CustomAlbum',
     'photos' => 'CustomPhoto',
+], [
+    'photos'
 ]);
 ```
 
