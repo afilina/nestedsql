@@ -5,7 +5,7 @@
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
-return function($statement, $classes = [])
+return function($statement, $classes = [], $singletonProperties = [])
 {
     // Ids enable us to list columns on the right objects.
     $dictionary = [];
@@ -18,11 +18,11 @@ return function($statement, $classes = [])
         return new stdClass();
     };
 
-    $add_row = function($row, &$parent, &$dictionary) use ($create_class)
+    $add_row = function($row, &$parent, &$dictionary) use ($create_class, $singletonProperties)
     {
         foreach ($row as $alias => $value) {
             if ($value === null) {
-                return;
+                continue;
             }
 
             $alias_parts = explode('__', $alias);
@@ -53,7 +53,12 @@ return function($statement, $classes = [])
                         $list_element = $dictionary[$dict_key];
                     }
                     $list = $list_parent->$list_property;
-                    $list[$row[$id_alias]] = $list_element;
+                    
+					if (in_array($list_property, $singletonProperties))
+						$list = $list_element;
+					else
+						$list[$row[$id_alias]] = $list_element;
+
                     $list_parent->$list_property = $list;
                 }
                 // Assign properties to object
@@ -66,7 +71,7 @@ return function($statement, $classes = [])
 
     $parent = new stdClass();
     while($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
-        $add_row($row, $parent, $dictionary);
+        $add_row($row, $parent, $dictionary, $singletonProperties);
     }
 
     $statement->closeCursor();
